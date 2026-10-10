@@ -45,6 +45,19 @@ public class BookingService {
         return new BookingResult.Confirmed(booking);
     }
 
+
+    /**
+     * Reports whether {@code room} is free over {@code interval}, so callers can
+     * check availability before attempting to book.
+     */
+    public boolean isAvailable(Room room, TimeInterval interval) {
+        for (Booking b : store.bookingsForRoom(room)) {
+            if (b.interval().overlaps(interval)) { // 直接复用领域层唯一的冲突规则
+                return false;
+            }
+        }
+        return true;
+    }
     /** Returns the confirmed bookings for {@code room}. */
     public List<Booking> listBookings(Room room) {
         return store.bookingsForRoom(room);
@@ -85,5 +98,5 @@ public class BookingService {
             store.removeWaitlistEntry(entry.id());
             break;
         }
-    }
+  }
 }
