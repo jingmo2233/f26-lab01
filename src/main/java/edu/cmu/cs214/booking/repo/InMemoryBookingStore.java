@@ -25,8 +25,10 @@ public class InMemoryBookingStore implements BookingStore {
 
     @Override
     public List<Booking> bookingsForRoom(Room room) {
-        // The bookings held for a single room.
-        return List.copyOf(bookings);
+        // 使用 Stream API 过滤出属于该房间的预订
+        return bookings.stream()
+                .filter(b -> b.room().id().equals(room.id()))
+                .toList();
     }
 
     @Override
